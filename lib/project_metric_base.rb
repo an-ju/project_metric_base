@@ -28,7 +28,7 @@ module ProjectMetricBase
 
   def refresh
     @raw_data = self.class.data_names.inject({}) do |dhash, d|
-      dhash.update({ d: send(d) })
+      dhash.update({ d => send(d) })
     end
   end
 
@@ -39,7 +39,7 @@ module ProjectMetricBase
     self.class.data_names.each do |d|
       if new_data.has_key? d
         @raw_data[d] = new_data[d]
-        instance_variable_set(('@'+d.to_s).to_sym, new_data[d])
+        instance_variable_set(('@'+d).to_sym, new_data[d])
       else
         @raw_data[d] = send(d)
       end
@@ -50,7 +50,7 @@ module ProjectMetricBase
     @raw_data = {}
     self.class.data_names.each do |d|
       @raw_data[d] = new_data[d]
-      instance_variable_set(('@'+d.to_s).to_sym, new_data[d])
+      instance_variable_set(('@'+d).to_sym, new_data[d])
     end
     @raw_data
   end

@@ -16,14 +16,14 @@ RSpec.describe ProjectMetricBase do
     describe 'add_credentials' do
       it 'adds credentials' do
         dummy_class.include ProjectMetricBase
-        expect { dummy_class.add_credentials %I[c1] }.to change { dummy_class.credentials }
+        expect { dummy_class.add_credentials %w[c1] }.to change { dummy_class.credentials }
       end
     end
 
     describe 'add_raw_data' do
       it 'adds data names' do
         dummy_class.include ProjectMetricBase
-        expect { dummy_class.add_raw_data %I[d1] }.to change { dummy_class.data_names }
+        expect { dummy_class.add_raw_data %w[d1] }.to change { dummy_class.data_names }
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.describe ProjectMetricBase do
   describe 'InstanceMethods' do
     before :each do
       @dummy_class = Class.new { include ProjectMetricBase }
-      @dummy_class.add_raw_data %I[d1 d2]
+      @dummy_class.add_raw_data %w[d1 d2]
       @dummy_instance = @dummy_class.new
     end
 
@@ -47,13 +47,13 @@ RSpec.describe ProjectMetricBase do
     describe 'complete_with' do
       it 'sets raw_data given partial input' do
         expect(@dummy_instance).to receive(:d2)
-        @dummy_instance.complete_with(d1: 'test')
-        expect(@dummy_instance.instance_variable_get('@raw_data'.to_sym)).to have_key(:d1)
-        expect(@dummy_instance.instance_variable_get('@raw_data'.to_sym)).to have_key(:d2)
+        @dummy_instance.complete_with('d1' => 'test')
+        expect(@dummy_instance.instance_variable_get('@raw_data'.to_sym)).to have_key('d1')
+        expect(@dummy_instance.instance_variable_get('@raw_data'.to_sym)).to have_key('d2')
       end
 
       it 'sets instance variable from given inputs' do
-        @dummy_instance.complete_with(d1: 'v1', d2: 'v2')
+        @dummy_instance.complete_with('d1' => 'v1', 'd2' => 'v2')
         expect(@dummy_instance.instance_variable_get('@d1'.to_sym)).to eql('v1')
         expect(@dummy_instance.instance_variable_get('@d2'.to_sym)).to eql('v2')
       end
@@ -67,12 +67,12 @@ RSpec.describe ProjectMetricBase do
 
     describe 'raw_data=' do
       it 'sets raw_data' do
-        @dummy_instance.raw_data = { d1: 'v1', d2: 'v2' }
-        expect(@dummy_instance.instance_variable_get('@raw_data'.to_sym)).to include(d1: 'v1', d2: 'v2')
+        @dummy_instance.raw_data = { 'd1' => 'v1', 'd2' => 'v2' }
+        expect(@dummy_instance.instance_variable_get('@raw_data'.to_sym)).to include('d1' => 'v1', 'd2' => 'v2')
       end
 
       it 'sets instance variables' do
-        @dummy_instance.raw_data = { d1: 'v1', d2: 'v2' }
+        @dummy_instance.raw_data = { 'd1' => 'v1', 'd2' => 'v2' }
         expect(@dummy_instance.instance_variable_get('@d1'.to_sym)).to eql('v1')
         expect(@dummy_instance.instance_variable_get('@d2'.to_sym)).to eql('v2')
       end
