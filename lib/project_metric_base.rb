@@ -36,7 +36,7 @@ module ProjectMetricBase
     end
   end
 
-  def raw_data=(new_data)
+  def complete_with(new_data)
     return refresh if new_data.nil?
 
     @raw_data = {}
@@ -48,6 +48,15 @@ module ProjectMetricBase
         @raw_data[d] = send(d)
       end
     end
+  end
+
+  def raw_data=(new_data)
+    @raw_data = {}
+    self.class.data_names.each do |d|
+      @raw_data[d] = new_data[d]
+      instance_variable_set(('@'+d.to_s).to_sym, new_data[d])
+    end
+    @raw_data
   end
 
   def image

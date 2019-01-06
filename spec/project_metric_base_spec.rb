@@ -44,16 +44,16 @@ RSpec.describe ProjectMetricBase do
       end
     end
 
-    describe 'raw_data=' do
+    describe 'complete_with' do
       it 'sets raw_data given partial input' do
         expect(@dummy_instance).to receive(:d2)
-        @dummy_instance.raw_data = { d1: 'test' }
+        @dummy_instance.complete_with(d1: 'test')
         expect(@dummy_instance.instance_variable_get('@raw_data'.to_sym)).to have_key(:d1)
         expect(@dummy_instance.instance_variable_get('@raw_data'.to_sym)).to have_key(:d2)
       end
 
       it 'sets instance variable from given inputs' do
-        @dummy_instance.raw_data = { d1: 'v1', d2: 'v2'}
+        @dummy_instance.complete_with(d1: 'v1', d2: 'v2')
         expect(@dummy_instance.instance_variable_get('@d1'.to_sym)).to eql('v1')
         expect(@dummy_instance.instance_variable_get('@d2'.to_sym)).to eql('v2')
       end
@@ -61,7 +61,20 @@ RSpec.describe ProjectMetricBase do
       it 'sets up all inputs when given nil input' do
         expect(@dummy_instance).to receive(:d1)
         expect(@dummy_instance).to receive(:d2)
-        @dummy_instance.raw_data = nil
+        @dummy_instance.complete_with nil
+      end
+    end
+
+    describe 'raw_data=' do
+      it 'sets raw_data' do
+        @dummy_instance.raw_data = { d1: 'v1', d2: 'v2' }
+        expect(@dummy_instance.instance_variable_get('@raw_data'.to_sym)).to include(d1: 'v1', d2: 'v2')
+      end
+
+      it 'sets instance variables' do
+        @dummy_instance.raw_data = { d1: 'v1', d2: 'v2' }
+        expect(@dummy_instance.instance_variable_get('@d1'.to_sym)).to eql('v1')
+        expect(@dummy_instance.instance_variable_get('@d2'.to_sym)).to eql('v2')
       end
     end
 
