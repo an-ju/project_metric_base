@@ -78,5 +78,12 @@ RSpec.describe ProjectMetricBase do
       end
     end
 
+    describe 'raw_data' do
+      it 'gives raw data' do
+        @dummy_instance.instance_variable_set('@raw_data'.to_sym, 'test')
+        expect(@dummy_instance.raw_data).to eql('test')
+      end
+    end
+
   end
 end

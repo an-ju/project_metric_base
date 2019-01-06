@@ -1,6 +1,7 @@
 require "project_metric_base/version"
 
 module ProjectMetricBase
+  attr_reader :raw_data
   class Error < StandardError; end
 
   def self.included(base)
@@ -8,6 +9,9 @@ module ProjectMetricBase
   end
 
   module ClassMethods
+    attr_accessor :credentials
+    attr_accessor :data_names
+
     def meta
       { credentials: @credentials,
         raw_data: @data_names }
@@ -19,14 +23,6 @@ module ProjectMetricBase
 
     def add_raw_data(new_raw_data)
       @data_names = new_raw_data
-    end
-
-    def credentials
-      @credentials
-    end
-
-    def data_names
-      @data_names
     end
   end
 
