@@ -67,4 +67,8 @@ module ProjectMetricBase
     raise NotImplementedError
   end
 
+  def obj_id
+    raise NotImplementedError
+  end
+
 end
